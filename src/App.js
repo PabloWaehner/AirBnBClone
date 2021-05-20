@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import NavBar from './utility/NavBar/NavBar';
+import SingleFullVenue from './pages/SingleFullVenue/SingleFullVenue';
+import Modal from './utility/Modal/Modal';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  render() {
+    return (
+      <Router>
+        <Route path="/" component={NavBar} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/venue/:vid" component={SingleFullVenue} />
+        <Route path="/" component={Modal} />
+      </Router>
+    )
+  }
 }
 
 export default App;
