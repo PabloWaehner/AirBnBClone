@@ -13,4 +13,4 @@ export default (openClose, content) => {
     }
 }
 
-// this will be sent to siteModal.js (from an action to a reducer)
+// this will be sent to the dispatcher, and then all reducers (siteModal.js will "catch it" because of the conditional) (from an action to a reducer)

@@ -64,7 +64,7 @@ class Home extends Component {
     }
 
     render() { //Reminder: the page will re-render after the state is changed
-        console.log("this.state.activities: ", this.state.activities);
+        // console.log("this.state.activities: ", this.state.activities);
         // in the developer tools, under network, there's the option to set "throttling" to slow 3G, that way the website
         // simulates slow connection, and it's possible to see what happens between render() and componentDidMount for example
         // console.log("this.state.activities in home.js (render()): ", this.state.activities); //gets logged twice, once with the initial state (empty) and after componentDidMount updates de state

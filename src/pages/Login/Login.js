@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal';
 import SignUp from './SignUp';
+import axios from 'axios';
 
 class Login extends Component {
 
@@ -30,7 +31,7 @@ class Login extends Component {
 
 }
 
-function mapDispatchToProps(dispatcher) {
+function mapDispatchToProps(dispatcher) { //THANKS TO THIS THE COMPONENT CAN CHANGE THE STATE (action->reducer->store)
     return bindActionCreators({
         openModal: openModal,
     }, dispatcher)

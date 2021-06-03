@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import './Login.css'
+import './Login.css';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import openModal from '../../actions/openModal';
-import Login from './Login'
+import regAction from '../../actions/regAction';
+import Login from './Login';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 class SignUp extends Component {
 
@@ -26,13 +29,49 @@ class SignUp extends Component {
         })
     }
 
-    submitLogin = (e) => {
+    submitLogin = async (e) => {
         e.preventDefault();
-        console.log(this.state.email);
-        console.log(this.state.password);
+        // console.log(this.state.email);
+        // console.log(this.state.password);
+        const url = `${window.apiHost}/users/signup`;
+        const data = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        const resp = await axios.post(url, data);
+        const token = resp.data.token; //this is a JSON Web Token --> used for authentication (http is stateless, there is no memory of who one is. That's what the token is for)
+        console.log("token: ", token);
+        console.log("resp.data: ", resp.data); //prints an object with msg , token and email
+
+        ////////////
+        // resp.data.msg could be:
+        // - invalidData
+        // - userExists
+        // - userAdded
+        if (resp.data.msg === "userExists") {
+            swal({
+                title: "Email Exists",
+                text: "The email you provided is already registered. Please try another.",
+                icon: "error",
+            })
+        } else if (resp.data.msg === "invalidData") {
+            swal({
+                title: "Invalid email/password",
+                text: "Please provide a valid email and password",
+                icon: "error",
+            })
+        } else if (resp.data.msg === "userAdded") {
+            swal({
+                title: "Success!",
+                icon: "success",
+            });
+            // we call our register action to update our auth reducer
+            this.props.regAction(resp.data);
+        }
     }
 
     render() {
+        console.log("this.props.auth: ", this.props.auth); //this will show the resp.data in this.props.regAction if it is successful
         return (
             <div className="login-form">
                 <form onSubmit={this.submitLogin}>
@@ -53,13 +92,20 @@ class SignUp extends Component {
 
 }
 
-function mapDispatchToProps(dispatcher) {
+function mapStateToProps(state) { //THANKS TO THIS THE COMPONENT CAN ACCESS THE STATE
+    return {
+        auth: state.auth, //from authReducer.js
+    }
+}
+
+function mapDispatchToProps(dispatcher) { //THANKS TO THIS THE COMPONENT CAN CHANGE THE STATE (action->reducer->store)
     return bindActionCreators({
-        openModal: openModal
+        openModal: openModal,
+        regAction: regAction
     }, dispatcher)
 }
 
-export default connect(null, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
 
 const SignUpInputFields = (props) => {
     return (
@@ -67,7 +113,7 @@ const SignUpInputFields = (props) => {
             <div className="col m12">
                 <div className="input-field" id="email">
                     <div className="form-label">Email</div>
-                    <input type="text" placeholder="Email" onChange={props.changeEmail} />
+                    <input type="email" placeholder="Email" onChange={props.changeEmail} />
                 </div>
             </div>
             <div className="col m12">
