@@ -71,7 +71,7 @@ class SignUp extends Component {
     }
 
     render() {
-        console.log("this.props.auth: ", this.props.auth); //this will show the resp.data in this.props.regAction if it is successful
+        console.log("this.props.auth: ", this.props.auth); //this will show the resp.data in this.props.regAction if it is successful (it will be empty otherwise)
         return (
             <div className="login-form">
                 <form onSubmit={this.submitLogin}>
