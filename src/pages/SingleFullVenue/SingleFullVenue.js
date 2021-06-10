@@ -27,11 +27,11 @@ class SingleFullVenue extends Component {
     }
 
     reserveNow = async (e) => {
-        console.log(e);
+        // console.log(e);
     }
 
     render() {
-        console.log(this.state.singleVenue);
+        // console.log(this.state.singleVenue);
         const sv = this.state.singleVenue;
         return (
             <div className="row single-venue">

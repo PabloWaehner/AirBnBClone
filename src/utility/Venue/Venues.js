@@ -3,7 +3,7 @@ import Venue from './Venue';
 import './Venue.css'
 
 function Venues(props) {
-    console.log(props)
+    // console.log(props)
     const venues = props.venues.map((venue, i) => {
         // console.log(venue)
         return (
