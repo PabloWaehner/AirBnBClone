@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import openModal from '../../actions/openModal';
 import { bindActionCreators } from 'redux';
 import Login from '../Login/Login';
-
+import moment from 'moment';
+import swal from 'sweetalert';
 
 class SingleFullVenue extends Component {
 
@@ -31,8 +32,30 @@ class SingleFullVenue extends Component {
         this.setState({ singleVenue, points });
     }
 
+    changeNumberOfGuests = (e) => { this.setState({ numberOfGuests: e.target.value }) }
+    changeCheckIn = (e) => { this.setState({ checkIn: e.target.value }) }
+    changeCheckOut = (e) => { this.setState({ checkOut: e.target.value }) }
+
     reserveNow = async (e) => {
-        // console.log(e);
+        const startDayMoment = moment(this.state.checkIn);
+        // console.log("startDayMoment: ", startDayMoment); //Moment {...}
+        const endDayMoment = moment(this.state.checkOut);
+        const diffDays = endDayMoment.diff(startDayMoment, "days");
+        if (diffDays < 1) {
+            swal({
+                title: "Check out date must be after check in date",
+                icon: 'error',
+            })
+        } else if (isNaN(diffDays)) {
+            swal({
+                title: "Please make sure your dates are valid",
+                icon: 'error',
+            })
+        } else {
+            const pricePerNight = this.state.singleVenue.pricePerNight;
+            const totalPrice = pricePerNight * diffDays;
+            console.log(totalPrice);
+        }
     }
 
     render() {
