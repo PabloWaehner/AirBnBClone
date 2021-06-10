@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; //we want this component to know about redux, for that we need react-redux (we need the connect function)
 import { bindActionCreators } from 'redux';
 import openModal from '../../actions/openModal';
+import logoutAction from '../../actions/logoutAction';
 import Login from '../../pages/Login/Login';
 import SignUp from '../../pages/Login/SignUp';
 
@@ -66,7 +67,7 @@ function mapDispatchToProps(dispatcher) {
     // Second argument for the bindActionCreators is the dispatch
     return bindActionCreators({
         openModal: openModal,
-        // logoutAction: logoutAction,
+        logoutAction: logoutAction,
     }, dispatcher)
 }
 

@@ -40,8 +40,8 @@ class SignUp extends Component {
         }
         const resp = await axios.post(url, data);
         const token = resp.data.token; //this is a JSON Web Token --> used for authentication (http is stateless, there is no memory of who one is. That's what the token is for)
-        console.log("token: ", token);
-        console.log("resp.data: ", resp.data); //prints an object with msg , token and email
+        // console.log("token: ", token);
+        // console.log("resp.data: ", resp.data); //prints an object with msg , token and email
 
         ////////////
         // resp.data.msg could be:
@@ -71,7 +71,7 @@ class SignUp extends Component {
     }
 
     render() {
-        console.log("this.props.auth: ", this.props.auth); //this will show the resp.data in this.props.regAction if it is successful (it will be empty otherwise)
+        // console.log("this.props.auth: ", this.props.auth); //this will show the resp.data in this.props.regAction if it is successful (it will be empty otherwise)
         return (
             <div className="login-form">
                 <form onSubmit={this.submitLogin}>
