@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
+import Spinner from './utility/Spinner/Spinner';
 
+//Redux setup
 // 1. In order to wire up a react/redux app, we need react-redux.
 // We need the Provider ReactComponent, to be around everything!
 import { Provider } from 'react-redux';
@@ -15,14 +17,31 @@ import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers/rootReducer';
 import reduxPromise from 'redux-promise';
 
+// Redux Persist Setup
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import { PersistGate } from 'redux-persist/integration/react'
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  stateReconciler: autoMergeLevel2, //State reconcilers define how incoming state is merged in with initial state (https://github.com/rt2zz/redux-persist)
+  blacklist: ['siteModal',] //now siteModal is no longer in the local storage (we don't care about having it there)
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 // 5. Create the store (2) by passing it the rootReducer, which is made up of the reducers
-const theStore = applyMiddleware(reduxPromise)(createStore)(rootReducer);
+const theStore = applyMiddleware(reduxPromise)(createStore)(persistedReducer);
+const persistor = persistStore(theStore)
 
 // Provider is the glue between react and redux. We need to give it the store
 ReactDOM.render(
   // <React.StrictMode>
   <Provider store={theStore}>
-    <App />
+    <PersistGate loading={<Spinner />} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   // </React.StrictMode>,
   document.getElementById('root')
