@@ -8,12 +8,16 @@ import { bindActionCreators } from 'redux';
 import Login from '../Login/Login';
 import moment from 'moment';
 import swal from 'sweetalert';
+import loadScript from '../../utilityFunctions/loadScript';
 
 class SingleFullVenue extends Component {
 
     state = {
         singleVenue: {},
-        points: []
+        points: [],
+        checkIn: "",
+        checkOut: "",
+        numberOfGuests: 1,
     }
 
     async componentDidMount() {
@@ -54,7 +58,30 @@ class SingleFullVenue extends Component {
         } else {
             const pricePerNight = this.state.singleVenue.pricePerNight;
             const totalPrice = pricePerNight * diffDays;
-            console.log(totalPrice);
+            const scriptUrl = 'https://js.stripe.com/v3';
+            const stripePublicKey = 'pk_test_5198HtPL5CfCPYJ3X8TTrO06ChWxotTw6Sm2el4WkYdrfN5Rh7vEuVguXyPrTezvm3ntblRX8TpjAHeMQfHkEpTA600waD2fMrT';
+            await loadScript(scriptUrl);
+            const stripe = window.Stripe(stripePublicKey);
+            const stripeSessionUrl = `${window.apiHost}/payment/create-session`;
+            const data = {
+                venueData: this.state.singleVenue,
+                totalPrice,
+                diffDays,
+                pricePerNight,
+                checkIn: this.state.checkIn,
+                checkOut: this.state.checkOut,
+                token: this.props.auth.token,
+                numberOfGuests: this.state.numberOfGuests,
+                currency: 'USD',
+            }
+            const sessionVar = await axios.post(stripeSessionUrl, data);
+            // console.log(sessionVar.data);
+            stripe.redirectToCheckout({ //it will redirect to https://checkout.stripe.com/
+                sessionId: sessionVar.data.id,
+            }).then((result) => {
+                console.log(result);
+                //if the network fails, this will run
+            })
         }
     }
 
