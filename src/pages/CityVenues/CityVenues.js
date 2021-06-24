@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './CityVenues.css';
 import axios from 'axios';
 import Spinner from '../../utility/Spinner/Spinner';
 import Venues from '../../utility/Venue/Venues';
