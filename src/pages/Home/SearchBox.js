@@ -19,10 +19,10 @@ class SearchBox extends Component {
         this.setState({ guests: e.target.value });
     }
 
-    // submitSearch = (e) => {
-    //     e.preventDefault();
-    //     this.props.history.push(`/search/${this.state.where}`)
-    // }
+    submitSearch = (e) => {
+        e.preventDefault();
+        this.props.history.push(`/search/${this.state.where}`)
+    }
 
     render() {
         return (
